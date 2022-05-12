@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Aluno{
+  matricula Int
+  nome String
+  email String
+  data_nasc String
+  salas AlunosSalas[]
+  
+  @@id([matricula])
+}
+
+model Professor{
+  matricula Int
+  nome String
+  email String
+  data_nasc String
+  sala Sala?
+
+  @@id([matricula])
+}
+
+model Sala{ 
+  numero Int
+  capacidade Int
+  disponivel Boolean
+  professor Professor @relation(fields: [professor_matricula], references: [matricula], onDelete: Cascade)
+  professor_matricula Int
+  alunos AlunosSalas[]
+
+  @@id([numero])
+}
+
+model AlunosSalas{
+  aluno Aluno @relation(fields: [aluno_matricula], references: [matricula], onDelete: Cascade)
+  aluno_matricula Int
+  sala Sala @relation(fields: [sala_numero], references: [numero], onDelete: Cascade) 
+  sala_numero Int 
+
+  @@id([aluno_matricula, sala_numero])
+}
