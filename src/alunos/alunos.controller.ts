@@ -1,34 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
+// eslint-disable-next-line prettier/prettier
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { AlunosService } from './alunos.service';
-import { CreateAlunoDto } from './dto/create-aluno.dto';
-import { UpdateAlunoDto } from './dto/update-aluno.dto';
+import { Prisma } from '@prisma/client';
 
 @Controller('alunos')
 export class AlunosController {
   constructor(private readonly alunosService: AlunosService) {}
 
   @Post()
-  create(@Body() createAlunoDto: CreateAlunoDto) {
+  create(@Body() createAlunoDto: Prisma.AlunoCreateInput) {
     return this.alunosService.create(createAlunoDto);
   }
 
-  @Get()
-  findAll() {
-    return this.alunosService.findAll();
+  @Get(':matricula')
+  findOne(@Param('matricula') matricula: number) {
+    return this.alunosService.findOne(+matricula);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.alunosService.findOne(+id);
+  @Put(':matricula')
+  update(@Param('matricula') matricula: number, @Body() updateAlunoDto: Prisma.AlunoUpdateInput) {
+    return this.alunosService.update(+matricula, updateAlunoDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAlunoDto: UpdateAlunoDto) {
-    return this.alunosService.update(+id, updateAlunoDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.alunosService.remove(+id);
+  @Delete(':matricula')
+  remove(@Param('matricula') matricula: number) {
+    return this.alunosService.remove(+matricula);
   }
 }

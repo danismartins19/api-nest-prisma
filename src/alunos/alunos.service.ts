@@ -1,26 +1,42 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CreateAlunoDto } from './dto/create-aluno.dto';
-import { UpdateAlunoDto } from './dto/update-aluno.dto';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class AlunosService {
-  create(createAlunoDto: CreateAlunoDto) {
-    return 'This action adds a new aluno';
+  constructor(private prisma: PrismaService){}
+
+  async create(createAlunoDto: Prisma.AlunoCreateInput) {
+    return this.prisma.aluno.create({
+      data: createAlunoDto
+    })
   }
 
-  findAll() {
-    return `This action returns all alunos`;
+  async findOne(matricula: number) {
+    return this.prisma.aluno.findUnique({
+      where: {matricula}
+    })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} aluno`;
+  async update(matricula: number, updateAlunoDto: Prisma.AlunoUpdateInput) {
+    return  this.prisma.aluno.update({
+      where: {matricula},
+      data: updateAlunoDto
+    })
   }
 
-  update(id: number, updateAlunoDto: UpdateAlunoDto) {
-    return `This action updates a #${id} aluno`;
+  async remove(matricula: number) {
+    return this.prisma.aluno.delete({
+      where:{
+        matricula
+      }
+    })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} aluno`;
+  async findAllRooms(matricula:number){
+    return 'oi'
   }
 }
