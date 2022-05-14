@@ -1,34 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { SalasService } from './salas.service';
-import { CreateSalaDto } from './dto/create-sala.dto';
-import { UpdateSalaDto } from './dto/update-sala.dto';
+
 
 @Controller('salas')
 export class SalasController {
   constructor(private readonly salasService: SalasService) {}
 
   @Post()
-  create(@Body() createSalaDto: CreateSalaDto) {
+  create(@Body() createSalaDto: Prisma.SalaUncheckedCreateInput) {
     return this.salasService.create(createSalaDto);
   }
 
-  @Get()
-  findAll() {
-    return this.salasService.findAll();
+  @Get(':numero')
+  findOne(@Param('numero') numero: number) {
+    return this.salasService.findOne(+numero);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.salasService.findOne(+id);
+  @Put(':numero')
+  update(@Param('numero') numero: number, @Body() updateSalaDto: Prisma.SalaUpdateInput) {
+    return this.salasService.update(+numero, updateSalaDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSalaDto: UpdateSalaDto) {
-    return this.salasService.update(+id, updateSalaDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.salasService.remove(+id);
+  @Delete(':numero')
+  remove(@Param('numero') numero: number) {
+    return this.salasService.remove(+numero);
   }
 }

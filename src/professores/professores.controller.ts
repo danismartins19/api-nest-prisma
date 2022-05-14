@@ -1,34 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { ProfessoresService } from './professores.service';
-import { CreateProfessoreDto } from './dto/create-professore.dto';
-import { UpdateProfessoreDto } from './dto/update-professore.dto';
 
 @Controller('professores')
 export class ProfessoresController {
   constructor(private readonly professoresService: ProfessoresService) {}
 
   @Post()
-  create(@Body() createProfessoreDto: CreateProfessoreDto) {
-    return this.professoresService.create(createProfessoreDto);
+  create(@Body() createProfessorDto: Prisma.ProfessorCreateInput) {
+    return this.professoresService.create(createProfessorDto);
   }
 
-  @Get()
-  findAll() {
-    return this.professoresService.findAll();
+  @Get(':matricula')
+  findOne(@Param('matricula') matricula: number) {
+    return this.professoresService.findOne(+matricula);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.professoresService.findOne(+id);
+  @Put(':matricula')
+  update(@Param('matricula') matricula: number, @Body() updateProfessorDto: Prisma.ProfessorUpdateInput) {
+    return this.professoresService.update(+matricula, updateProfessorDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfessoreDto: UpdateProfessoreDto) {
-    return this.professoresService.update(+id, updateProfessoreDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.professoresService.remove(+id);
+  @Delete(':matricula')
+  remove(@Param('matricula') matricula: number) {
+    return this.professoresService.remove(+matricula);
   }
 }

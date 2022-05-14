@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
@@ -10,6 +10,18 @@ export class AlunosService {
   constructor(private prisma: PrismaService){}
 
   async create(createAlunoDto: Prisma.AlunoCreateInput) {
+
+    const matricula = createAlunoDto.matricula;
+    const aluno = this.prisma.aluno.findUnique({
+      where: {matricula}
+    })
+
+    if(aluno){
+      throw new HttpException('Aluno já cadastrado', HttpStatus.BAD_REQUEST)
+;    }
+
+
+
     return this.prisma.aluno.create({
       data: createAlunoDto
     })
