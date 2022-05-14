@@ -5,6 +5,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
+
 @Injectable()
 export class AlunosService {
   constructor(private prisma: PrismaService){}
@@ -12,39 +13,60 @@ export class AlunosService {
   async create(createAlunoDto: Prisma.AlunoCreateInput) {
 
     const matricula = createAlunoDto.matricula;
-    const aluno = this.prisma.aluno.findUnique({
-      where: {matricula}
+    
+    const aluno = await this.prisma.aluno.findUnique({
+      where : {matricula}
     })
 
     if(aluno){
       throw new HttpException('Aluno já cadastrado', HttpStatus.BAD_REQUEST)
-;    }
+    }
 
 
-
-    return this.prisma.aluno.create({
+    return await this.prisma.aluno.create({
       data: createAlunoDto
     })
   }
 
-  async findOne(matricula: number) {
-    return this.prisma.aluno.findUnique({
-      where: {matricula}
+  async findOne(where: Prisma.AlunoWhereUniqueInput) {
+
+    const aluno = await this.prisma.aluno.findUnique({
+      where
     })
+    if(!aluno){
+      throw new HttpException('Aluno não encontrado', HttpStatus.BAD_REQUEST)
+    } else {
+      return aluno
+    }
   }
 
-  async update(matricula: number, updateAlunoDto: Prisma.AlunoUpdateInput) {
-    return  this.prisma.aluno.update({
-      where: {matricula},
-      data: updateAlunoDto
-    })
-  }
+  async update(where: Prisma.AlunoWhereUniqueInput, data: Prisma.AlunoUpdateInput) {
 
-  async remove(matricula: number) {
-    return this.prisma.aluno.delete({
-      where:{
-        matricula
+      const aluno = await this.prisma.aluno.findUnique({
+        where
+      })
+      if(!aluno){
+        throw new HttpException('Aluno não encontrado', HttpStatus.BAD_REQUEST)
       }
+
+      return  this.prisma.aluno.update({
+        where,
+        data
+      })
+    
+  }
+
+  async remove(where: Prisma.AlunoWhereUniqueInput) {
+
+    const aluno = await this.prisma.aluno.findUnique({
+      where
+    })
+    if(!aluno){
+      throw new HttpException('Aluno não encontrado', HttpStatus.BAD_REQUEST)
+    }
+
+    return this.prisma.aluno.delete({
+      where
     })
   }
 
