@@ -58,4 +58,9 @@ export class AlunosController {
   remove(@Param('matricula') matricula: number) {
     return this.alunosService.remove({matricula : +matricula});
   }
+
+  @Get(':matricula/listarSalas')
+  getAllSalas(@Param('matricula') matricula: number){
+    return this.alunosService.findAllRooms({matricula : +matricula});
+  }
 }

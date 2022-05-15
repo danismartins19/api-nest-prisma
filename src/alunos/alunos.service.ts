@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable prefer-const */
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -70,7 +72,32 @@ export class AlunosService {
     })
   }
 
-  async findAllRooms(matricula:number){
-    return 'oi'
+  async findAllRooms(where: Prisma.AlunoWhereUniqueInput){
+    const aluno = await this.prisma.aluno.findUnique({
+      where
+    })
+
+    if(!aluno){
+      throw new HttpException('Não foi encontrado um aluno com essa matricula', HttpStatus.BAD_REQUEST)
+    }
+
+    const salasAluno = await this.prisma.aluno.findUnique({
+      where,
+      include:{
+        salas: true
+      }
+    })
+
+    let result : any[] = []
+
+    if(salasAluno.salas.length > 0){
+      result.push(aluno.nome)
+      let salaArray: any[] = [];
+      for(let sala of salasAluno.salas){
+        
+      }
+    }
+    
+
   }
 }

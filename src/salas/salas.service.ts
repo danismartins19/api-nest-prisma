@@ -163,16 +163,22 @@ export class SalasService {
   }
 
   async verAlunos(where: Prisma.SalaWhereUniqueInput){
+
+    const sala = await this.prisma.sala.findUnique({
+      where
+    })
+
+    if(!sala){
+      throw new HttpException('Não foi encontrada uma sala com esse número', HttpStatus.BAD_REQUEST)
+    }
+
+
     const salaAlunos = await this.prisma.sala.findUnique({
       where,
       include:{
         alunos: true
       }
     })
-
-    
-    
-    
 
     if(salaAlunos.alunos.length === 0){
       return {
