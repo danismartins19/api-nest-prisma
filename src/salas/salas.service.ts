@@ -2,6 +2,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { AddAlunoSalaDto } from './dto/add-aluno-sala-dto';
 
 @Injectable()
 export class SalasService {
@@ -65,5 +66,62 @@ export class SalasService {
     return this.prisma.sala.delete({
       where
     })
+  }
+
+  async addAlunoSala(numero: number, matricula: number, addAlunoSalaDto : AddAlunoSalaDto){
+    const sala = await this.prisma.sala.findUnique({
+      where: { numero}
+    })
+
+    const aluno = await this.prisma.aluno.findUnique({
+      where: {matricula}
+    })
+
+    if(!aluno){
+      throw new HttpException('Não foi encontrado um aluno com essa matrícula', HttpStatus.BAD_REQUEST)
+    }
+
+    if(!sala){
+      throw new HttpException('Não foi encontrada uma sala com esse número', HttpStatus.BAD_REQUEST)
+    }
+
+    if(!sala.disponivel){
+      throw new HttpException('Essa sala não está disponivel no momento', HttpStatus.BAD_REQUEST)
+    }
+
+    if(sala.professor_matricula != addAlunoSalaDto.professor_matricula){
+      throw new HttpException('Esse professor não pode adicionar alunos a essa sala!', HttpStatus.BAD_REQUEST)
+    }
+
+    const salaAlunos = await this.prisma.sala.findUnique({
+      where: {numero},
+      include:{
+        alunos: true
+      }
+    })
+
+    if(salaAlunos.alunos.length >= sala.capacidade){
+      throw new HttpException('Essa sala está na sua capacidade máxima!', HttpStatus.BAD_REQUEST)
+    }
+
+    try{
+      return await this.prisma.sala.update({
+        where: { numero},
+        data: {
+          alunos: {
+            create: {
+              aluno_matricula: matricula,
+            }
+          }
+        }
+      })
+    } catch(err){
+      throw new HttpException('Não foi possivel adicionar esse aluno nessa sala', HttpStatus.BAD_REQUEST)
+    }
+
+
+
+
+
   }
 }
