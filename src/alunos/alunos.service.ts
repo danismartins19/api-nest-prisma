@@ -88,16 +88,24 @@ export class AlunosService {
       }
     })
 
-    let result : any[] = []
 
     if(salasAluno.salas.length > 0){
-      result.push(aluno.nome)
-      let salaArray: any[] = [];
+      let salaArray: any[ ]= [];
       for(let sala of salasAluno.salas){
-        
+        let salaProf = await this.prisma.sala.findUnique({
+          where: {numero : sala.sala_numero }
+        }).professor()
+
+        salaArray.push({
+          professor_nome: salaProf.nome,
+          numero_sala: sala.sala_numero
+        })
+      }
+
+      return{
+        nome_aluno: aluno.nome,
+        salas: salaArray
       }
     }
-    
-
   }
 }
