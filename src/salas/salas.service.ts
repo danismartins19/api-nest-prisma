@@ -1,4 +1,6 @@
 /* eslint-disable prettier/prettier */
+/* eslint-disable prefer-const */
+/* eslint-disable prettier/prettier */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
@@ -118,10 +120,79 @@ export class SalasService {
     } catch(err){
       throw new HttpException('Não foi possivel adicionar esse aluno nessa sala', HttpStatus.BAD_REQUEST)
     }
+  }
 
+  async delAluno(numero: number, matricula: number){
+    const sala = await this.prisma.sala.findUnique({
+      where: { numero}
+    })
 
+    const aluno = await this.prisma.aluno.findUnique({
+      where: {matricula}
+    })
 
+    if(!aluno){
+      throw new HttpException('Não foi encontrado um aluno com essa matrícula', HttpStatus.BAD_REQUEST)
+    }
 
+    if(!sala){
+      throw new HttpException('Não foi encontrada uma sala com esse número', HttpStatus.BAD_REQUEST)
+    }
 
+    try{
+      const alunoRemoved = await this.prisma.sala.update({
+        where: { numero},
+        data: {
+          alunos: {
+            deleteMany:{
+              aluno_matricula: matricula
+            }
+          }
+        }
+      })
+
+      if(alunoRemoved){
+        return {
+          message: "Aluno removido"
+        }
+      }
+
+    } catch(err){
+      throw new HttpException('Não foi possivel remover o aluno dessa sala', HttpStatus.BAD_REQUEST)
+    }
+  }
+
+  async verAlunos(where: Prisma.SalaWhereUniqueInput){
+    const salaAlunos = await this.prisma.sala.findUnique({
+      where,
+      include:{
+        alunos: true
+      }
+    })
+
+    
+    
+    
+
+    if(salaAlunos.alunos.length === 0){
+      return {
+        message: "Esta sala não possui alunos"
+      }
+    } else {
+
+      let result : Prisma.AlunoCreateInput[] = [];
+
+      for(let aluno of salaAlunos.alunos){
+        let searchAluno = await this.prisma.aluno.findUnique({
+          where: {matricula: aluno.aluno_matricula}
+        })
+  
+        result.push(
+          searchAluno
+        )
+      }
+
+      return result;
+    }
   }
 }

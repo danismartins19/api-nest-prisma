@@ -35,4 +35,16 @@ export class SalasController {
     return this.salasService.addAlunoSala(+numero, +matricula, addAlunoSalaDto);
   }
 
+  @Delete(':numero/delAluno/:matricula')
+  delAluno(@Param('numero') numero: number, @Param('matricula') matricula: number) {
+    return this.salasService.delAluno(+numero, +matricula);
+  }
+
+  @Get(':numero/verAlunos')
+  verAlunos(@Param('numero') numero: number) {
+    return this.salasService.verAlunos({numero : +numero});
+  }
+
+
+
 }
