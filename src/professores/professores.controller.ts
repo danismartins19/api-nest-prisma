@@ -38,6 +38,19 @@ export class ProfessoresController {
 
   @Put(':matricula')
   update(@Param('matricula') matricula: number, @Body() updateProfessorDto: UpdateProfessorDto) {
+
+    if(updateProfessorDto.data_nasc){
+      if(!testData(updateProfessorDto.data_nasc)){
+        throw new HttpException('Data de nascimento invalida', HttpStatus.BAD_REQUEST)
+      }
+    }
+
+    if(updateProfessorDto.email){
+      if(!testEmail(updateProfessorDto.email)){
+        throw new HttpException('Email inválido', HttpStatus.BAD_REQUEST)
+      }
+    }
+
     return this.professoresService.update({matricula : +matricula}, updateProfessorDto);
   }
 

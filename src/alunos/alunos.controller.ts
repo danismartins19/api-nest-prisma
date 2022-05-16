@@ -16,6 +16,8 @@ export class AlunosController {
   @Post()
   create(@Body() createAlunoDto: Prisma.AlunoCreateInput) {
 
+    
+
     if(createAlunoDto.data_nasc){
       if(!testData(createAlunoDto.data_nasc)){
         throw new HttpException('Data de nascimento invalida', HttpStatus.BAD_REQUEST)
