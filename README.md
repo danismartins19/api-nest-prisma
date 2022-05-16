@@ -35,7 +35,7 @@ Essa aplicação consiste em manter alunos, professores, e salas. Podendo adicio
 Diante do contexto da aplicação, eu pude aprender como o Nest trabalha com controllers e rotas, e também como o Prisma agiliza a persistência dos nossos dados e dos relacionamentos das tabelas.
 ## Instalação
 
-<strong>Obs: O banco de dados já estará pronto para o uso na aplicação!</strong>
+<strong>Obs: O banco de dados já estará pronto para o uso na aplicação! <br> Você poderá encontrar o arquivo em `./prisma/dev.db`</strong>
 
 ```bash
 $ npm install
