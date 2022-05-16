@@ -57,29 +57,87 @@ $ npm run start:prod
 ## URL Base
 
 Por padrão, o servidor se iniciará na porta 3000.
-Portanto, a URL local seria: http://localhost:3000/
+Portanto, a URL local será: http://localhost:3000/
 
 ## Endpoints 
 
-Você encontrará um arquivo chamado `Insomnia_Routes.json` na pasta base do projeto para importar no seu Insomnia. Nele irá conter todas as rotas, e os dados necessário de cada endpoint.
+Você encontrará um arquivo chamado `Insomnia_Routes.json` na pasta base do projeto para importar no seu Insomnia. Nele irá conter todas as rotas, e os dados necessário de cada endpoint. Mas você também poderá ver elas abaixo:
+
+#
 
 
 ## Alunos
 ```bash
   # Cadastrar Aluno
-  $POST - BASE_URL/alunos
+  $POST - $BASE_URL/alunos
   { "matricula" : number, "nome":string, "email":string, "data_nasc" : string }
 
   # Atualizar Aluno
-  $PUT - BASE_URL/alunos/{matricula}
+  $PUT - $BASE_URL/alunos/{matricula}
   { "nome":string, "email":string, "data_nasc" : string }
 
   # Consultar um Aluno
-  $GET - BASE_URL/alunos/{matricula}
+  $GET - $BASE_URL/alunos/{matricula}
 
   # Deletar um Aluno
-  $DELETE - BASE_URL/alunos/{matricula}
+  $DELETE - $BASE_URL/alunos/{matricula}
 
-  # 
+  # Consultar salas que o aluno está
+  $GET = $BASE_URL/alunos/{matricula}/listarSalas
 
 ```
+
+#
+
+## Professores
+```bash
+  # Cadastrar Professor
+  $POST - $BASE_URL/professores
+  { "matricula" : number, "nome":string, "email":string, "data_nasc" : string }
+
+  # Atualizar Professor
+  $PUT - $BASE_URL/professores/{matricula}
+  { "nome":string, "email":string, "data_nasc" : string }
+
+  # Consultar um Professor
+  $GET - $BASE_URL/professores/{matricula}
+
+  # Deletar um Professor
+  $DELETE - $BASE_URL/professores/{matricula}
+
+
+```
+
+#
+
+## Salas
+```bash
+  # Cadastrar Sala
+  $POST - $BASE_URL/salas
+  { "numero" : number, "capacidade":number, "disponivel":boolean, "professor_matricula" : number }
+
+  # Atualizar Sala
+  $PUT - $BASE_URL/salas/{numero}
+  { "capacidade":number, "disponivel":boolean}
+
+  # Consultar uma Sala
+  $GET - $BASE_URL/salas/{numero}
+
+  # Deletar uma Sala
+  $DELETE - $BASE_URL/salas/{numero}
+
+  # Consultar alunos de uma sala
+  $GET - $BASE_URL/salas/{numero}/verAlunos
+
+  # Alocar aluno em uma sala
+  $POST - $BASE_URL/salas/{numero}/addALuno/{matricula_aluno}
+  { "professor_matricula":number }
+
+  # Remover um aluno de uma sala
+  $DELETE - $BASE_URL/salas/{numero}/delAluno/{matricula_aluno}
+
+```
+
+# 
+
+## Obrigado!
