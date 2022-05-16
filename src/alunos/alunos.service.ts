@@ -106,6 +106,10 @@ export class AlunosService {
         nome_aluno: aluno.nome,
         salas: salaArray
       }
+    } else {
+      return {
+        message: "Esse aluno não está em nenhuma sala no momento!"
+      }
     }
   }
 }

@@ -22,52 +22,64 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Descrição
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Esse é um projeto desenvolvido com o framework [Nest.JS](https://github.com/nestjs/nest), Typescript, SQLite, e o famoso Prisma.
 
-## Installation
+## Contexto
+
+Essa aplicação consiste em manter alunos, professores, e salas. Podendo adicionar alunos à salas criadas pelos professores cadastrados na aplicação.
+
+## Conceitos 
+
+Diante do contexto da aplicação, eu pude aprender como o Nest trabalha com controllers e rotas, e também como o Prisma agiliza a persistência dos nossos dados e dos relacionamentos das tabelas.
+## Instalação
+
+<strong>Obs: O banco de dados já estará pronto para o uso na aplicação!</strong>
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## Rodando a aplicação
 
 ```bash
-# development
+# desenvolvimento
 $ npm run start
 
 # watch mode
 $ npm run start:dev
 
-# production mode
+# produção
 $ npm run start:prod
 ```
 
-## Test
+## URL Base
 
+Por padrão, o servidor se iniciará na porta 3000.
+Portanto, a URL local seria: http://localhost:3000/
+
+## Endpoints 
+
+Você encontrará um arquivo chamado `Insomnia_Routes.json` na pasta base do projeto para importar no seu Insomnia. Nele irá conter todas as rotas, e os dados necessário de cada endpoint.
+
+
+## Alunos
 ```bash
-# unit tests
-$ npm run test
+  # Cadastrar Aluno
+  $POST - BASE_URL/alunos
+  { "matricula" : number, "nome":string, "email":string, "data_nasc" : string }
 
-# e2e tests
-$ npm run test:e2e
+  # Atualizar Aluno
+  $PUT - BASE_URL/alunos/{matricula}
+  { "nome":string, "email":string, "data_nasc" : string }
 
-# test coverage
-$ npm run test:cov
+  # Consultar um Aluno
+  $GET - BASE_URL/alunos/{matricula}
+
+  # Deletar um Aluno
+  $DELETE - BASE_URL/alunos/{matricula}
+
+  # 
+
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
