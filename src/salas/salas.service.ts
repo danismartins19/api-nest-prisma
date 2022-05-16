@@ -13,6 +13,15 @@ export class SalasService {
   async create(createSalaDto: Prisma.SalaUncheckedCreateInput) {
     
     const numero = createSalaDto.numero;
+    const professor_matricula = createSalaDto.professor_matricula;
+    const professor = await this.prisma.professor.findUnique({
+      where: { matricula: professor_matricula}
+    })
+
+    if(!professor){
+      throw new HttpException('Não foi encontrado um professor com essa matricula', HttpStatus.BAD_REQUEST)
+    }
+
     const sala = await this.prisma.sala.findUnique({
       where: {numero}
     })
